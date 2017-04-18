@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_camera"
+            android:icon="@android:drawable/ic_dialog_dialer"
+            android:title="Inicio" />
+    </group>
+
+    <item android:title="Programas">
+        <menu>
+            <item
+                android:id="@+id/nav_tercalivre"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Terça Livre" />
+            <item
+                android:id="@+id/nav_boletimlivre"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Boletim Livre" />
+            <item
+                android:id="@+id/nav_italo"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Elas" />
+            <item
+                android:id="@+id/nav_deveritata"
+                android:icon="@drawable/ic_menu_send"
+                android:title="De Veritate" />
+            <item
+                android:id="@+id/nav_deunatelha"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Deu na Telha" />
+            <item
+                android:id="@+id/nav_caianareal"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Caia na Real" />
+
+
+
+
+
+        </menu>
+    </item>
+
+</menu>

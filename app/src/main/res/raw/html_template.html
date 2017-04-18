@@ -1,0 +1,72 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title></title>
+  <style media="screen" rel="stylesheet">
+  body{
+	font-family: times, "Times New Romam";
+	font-size: 20px;
+	color: #444;	
+	margin-left:10px !important;
+	margin-right:10px !important;
+
+	overflow: auto;
+	overflow-y: hidden;
+  }
+
+  iframe{
+    max-width: 100%;
+  }
+
+  img{
+    max-width: 100%;
+    width:auto; height:auto;
+  }
+
+  h1{
+    font-size: 120%;
+	font-weight: bold;
+	letter-spacing: -1px;
+	line-height: 24px;
+	padding-bottom: 25px;
+  }
+  .author{
+	font-size: 60%;
+  }
+  .postDate{
+	font-size: 60%;
+  }
+  .authorAndDate{
+
+	padding-bottom: 25px;
+  }
+  .content{
+     text-align: justify;
+     text-justify: inter-ideograph;
+	 line-height: 22px;
+	 padding-bottom:25px;
+  }
+  
+  
+  </style>
+
+</head>
+
+<body>
+  <div class="container">
+	<div class="pageTitle">
+	    <h1>@@TITLE@@</h1>
+    </div>
+	<div class="authorAndDate">
+	   <div class="author">@@AUTHOR@@</div>
+	   <div class="postDate">@@DATE@@</div>
+    </div>
+	<div class="content">
+		@@CONTENT@@
+    </div>		
+  </div>
+</body>
+</html>
