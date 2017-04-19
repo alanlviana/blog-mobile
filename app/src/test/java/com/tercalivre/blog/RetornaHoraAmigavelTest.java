@@ -1,7 +1,7 @@
 package com.tercalivre.blog;
 
 
-import com.tercalivre.blog.utls.RetornaHoraAmigavel;
+import com.tercalivre.blog.utils.RetornaHoraAmigavel;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -9,8 +9,6 @@ import org.junit.Test;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-
-import static android.R.attr.data;
 
 public class RetornaHoraAmigavelTest {
 

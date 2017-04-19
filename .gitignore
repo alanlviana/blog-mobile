@@ -1,1 +1,10 @@
+/app/.gitignore~
+/blog-mobile.iml
+/app/gradle/wrapper/gradle-wrapper.jar
+/app/gradle/wrapper/gradle-wrapper.properties
+/app/gradlew
+/app/gradlew.bat
+/app/local.properties
+/.gradle
+/.idea
 /build

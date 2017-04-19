@@ -15,7 +15,7 @@ import com.squareup.picasso.Picasso;
 import com.tercalivre.blog.LeitorActivity;
 import com.tercalivre.blog.R;
 import com.tercalivre.blog.model.ObjetoAPI;
-import com.tercalivre.blog.utls.RetornaHoraAmigavel;
+import com.tercalivre.blog.utils.RetornaHoraAmigavel;
 
 import java.util.List;
 
@@ -82,6 +82,8 @@ public class CardPostagemAdapter extends RecyclerView.Adapter<CardPostagemAdapte
                 i.putExtra("title",  mDataset.get(mPosition).title);
                 i.putExtra("date",  mDataset.get(mPosition).date);
                 i.putExtra("content",  mDataset.get(mPosition).content);
+                i.putExtra("thumbnail",  mDataset.get(mPosition).thumbnail);
+
 
                 mContext.startActivity(i);
             }
@@ -97,6 +99,7 @@ public class CardPostagemAdapter extends RecyclerView.Adapter<CardPostagemAdapte
 
 
 }
+
 
 
 

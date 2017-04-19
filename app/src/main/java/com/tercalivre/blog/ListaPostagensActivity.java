@@ -27,8 +27,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.tercalivre.blog.adapters.CardPostagemAdapter;
 import com.tercalivre.blog.model.ObjetoAPI;
-import com.tercalivre.blog.utls.NetworkCache;
-import com.tercalivre.blog.utls.Settings;
+import com.tercalivre.blog.utils.NetworkCache;
+import com.tercalivre.blog.utils.Settings;
 
 public class ListaPostagensActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
