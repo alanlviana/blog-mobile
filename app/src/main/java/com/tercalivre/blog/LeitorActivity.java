@@ -5,6 +5,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -45,17 +46,7 @@ public class LeitorActivity extends AppCompatActivity {
         wv_content = (WebView) findViewById(R.id.wv_artigo);
         header = (ImageView) findViewById(R.id.header);
 
-
-
-
-
-
         Picasso.with(this).load(str_thumbnail).placeholder(R.drawable.backgroud_drawer).into(header);
-
-
-
-
-
 
         wv_content.setScrollContainer(false);
         wv_content.getSettings().setSupportZoom(false);
@@ -64,10 +55,16 @@ public class LeitorActivity extends AppCompatActivity {
         wv_content.setWebChromeClient(new WebChromeClient());
         wv_content.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         wv_content.loadData(getHTML(), "text/html; charset=utf-8", "utf-8");
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) // Press Back Icon
+        {
+            finish();
+        }
 
-
-
+        return super.onOptionsItemSelected(item);
     }
 
 
