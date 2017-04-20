@@ -26,19 +26,26 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.tercalivre.blog.adapters.CardPostagemAdapter;
+import com.tercalivre.blog.adapters.EndlessRecyclerOnScrollListener;
 import com.tercalivre.blog.model.ObjetoAPI;
 import com.tercalivre.blog.utils.NetworkCache;
 import com.tercalivre.blog.utils.Settings;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ListaPostagensActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private RecyclerView mRecyclerView;
-    private ObjetoAPI.WordpressJson wordpressJson;
+    private List<ObjetoAPI.WordpressJson.Post> wordpressJson;
+    private EndlessRecyclerOnScrollListener scrollListener;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private LinearLayoutManager mLayoutManager;
     private ProgressDialog pDialog;
     private SwipeRefreshLayout swipeRefresh;
+    private final int quantidadePorPagina = 10;
 
 
     @Override
@@ -59,14 +66,33 @@ public class ListaPostagensActivity extends AppCompatActivity
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
+        wordpressJson = new ArrayList<>();
+        mAdapter = new CardPostagemAdapter(ListaPostagensActivity.this,wordpressJson);
+        mRecyclerView.setAdapter(mAdapter);
+
+        scrollListener =new EndlessRecyclerOnScrollListener(mLayoutManager) {
+            @Override
+            public void onLoadMore(int current_page) {
+                getPostJSON(current_page);
+            }
+        };
+
+        mRecyclerView.setOnScrollListener(scrollListener);
 
         swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.postagens_swipe_refresh);
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getPostJSON(Settings.URL_MAIN);
+                refresh();
+
             }
         });
+
+        refresh();
+
+
+
+
 
         // Drawer Layout
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -77,9 +103,6 @@ public class ListaPostagensActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-
-        getPostJSON(Settings.URL_MAIN);
     }
 
     @Override
@@ -126,8 +149,10 @@ public class ListaPostagensActivity extends AppCompatActivity
     }
 
 
-    private void getPostJSON(String url){
+    private void getPostJSON(int pagina){
         showDialog();
+        final String url = Settings.URL_MAIN+"&page="+pagina;
+
         try {
             RequestQueue queue = Volley.newRequestQueue(ListaPostagensActivity.this);
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {;
@@ -135,13 +160,26 @@ public class ListaPostagensActivity extends AppCompatActivity
                 public void onResponse(String response) {
                     GsonBuilder builder = new GsonBuilder();
                     Gson mGson = builder.create();
-                    wordpressJson = mGson.fromJson(response, ObjetoAPI.WordpressJson.class);
+                    ObjetoAPI.WordpressJson wordpressResponse = mGson.fromJson(response, ObjetoAPI.WordpressJson.class);
                     swipeRefresh.setRefreshing(false);
-                    mAdapter = new CardPostagemAdapter(ListaPostagensActivity.this,wordpressJson.posts);
-                    if (mAdapter.getItemCount() > 0) {
-                        Log.d("RESPONSE:",String.valueOf(mAdapter.getItemCount()));
-                        mRecyclerView.setAdapter(mAdapter);
+
+
+                    if (wordpressResponse.posts.size() > 0){
+                        Log.d("URL:",url);
+                        Log.d("RESPONSE:",String.valueOf(wordpressResponse.posts.size()));
+
+                        wordpressJson.addAll(wordpressResponse.posts);
+                        //Collections.sort(wordpressJson);
+                        //Collections.reverse(wordpressJson);
+                        if (mAdapter.getItemCount()>0){
+                            mAdapter.notifyDataSetChanged();
+                        }
+
+
+
                     }
+
+
                     hideDialog();
                 }
             }, new Response.ErrorListener() {
@@ -175,4 +213,13 @@ public class ListaPostagensActivity extends AppCompatActivity
         if (pDialog.isShowing())
             pDialog.dismiss();
     }
+
+
+    public void refresh(){
+        wordpressJson.clear();
+        getPostJSON(1);
+        scrollListener.resetState();
+
+    }
+
 }

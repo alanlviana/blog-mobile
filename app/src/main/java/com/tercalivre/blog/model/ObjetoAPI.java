@@ -1,7 +1,10 @@
 package com.tercalivre.blog.model;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ObjetoAPI {
@@ -11,7 +14,11 @@ public class ObjetoAPI {
         @SerializedName("posts")
         public List<Post> posts;
 
-        public class Post {
+        public WordpressJson(){
+            posts = new ArrayList<>();
+        }
+
+        public class Post  implements Comparable{
             @SerializedName("categories")
             public List<Category> categories;
 
@@ -19,7 +26,7 @@ public class ObjetoAPI {
             public String url;
 
             @SerializedName("id")
-            public String id;
+            public Integer id;
 
             @SerializedName("title")
             public String title;
@@ -35,6 +42,16 @@ public class ObjetoAPI {
 
             @SerializedName("date")
             public String date;
+
+            @Override
+            public int compareTo(@NonNull Object o) {
+                if (o instanceof Post){
+                    Post comparado = (Post)o;
+                    return id.compareTo(comparado.id);
+                }
+
+                return 0;
+            }
         }
 
         public class Category {

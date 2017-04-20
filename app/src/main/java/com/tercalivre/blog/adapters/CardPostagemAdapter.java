@@ -43,15 +43,15 @@ public class CardPostagemAdapter extends RecyclerView.Adapter<CardPostagemAdapte
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public CardPostagemAdapter(Context context,List<ObjetoAPI.WordpressJson.Post>
-                                       myDataset) {
-        mDataset = myDataset;
-        mContext = context;
+    public CardPostagemAdapter(Context context, List<ObjetoAPI.WordpressJson.Post>
+            myDataset) {
+        this.mDataset = myDataset;
+        this.mContext = context;
     }
 
     @Override
     public CardPostagemAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
+                                                             int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.postagemcard, parent, false);
@@ -64,13 +64,18 @@ public class CardPostagemAdapter extends RecyclerView.Adapter<CardPostagemAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         final int mPosition = position;
+
+
         Picasso.with(mContext).load(mDataset.get(position).thumbnail)
-                .placeholder(R.drawable.ic_256)
+                .placeholder(R.drawable.backgroud_drawer)
                 .into(holder.mThumbnail);
 
 
         holder.mCaption.setText(Html.fromHtml(mDataset.get(position).title));
-        holder.mCategory.setText(Html.fromHtml(mDataset.get(position).categories.get(0).title));
+        if (mDataset.get(position) != null && mDataset.get(position).categories.size() > 0) {
+            holder.mCategory.setText(Html.fromHtml(mDataset.get(position).categories.get(0).title));
+        }
+
 
         String descricaoHora = new RetornaHoraAmigavel().retornaDescricaoDiferenca(mDataset.get(position).date);
         holder.mHora.setText(descricaoHora);
@@ -79,10 +84,10 @@ public class CardPostagemAdapter extends RecyclerView.Adapter<CardPostagemAdapte
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(mContext, LeitorActivity.class);
-                i.putExtra("title",  mDataset.get(mPosition).title);
-                i.putExtra("date",  mDataset.get(mPosition).date);
-                i.putExtra("content",  mDataset.get(mPosition).content);
-                i.putExtra("thumbnail",  mDataset.get(mPosition).thumbnail);
+                i.putExtra("title", mDataset.get(mPosition).title);
+                i.putExtra("date", mDataset.get(mPosition).date);
+                i.putExtra("content", mDataset.get(mPosition).content);
+                i.putExtra("thumbnail", mDataset.get(mPosition).thumbnail);
 
 
                 mContext.startActivity(i);
