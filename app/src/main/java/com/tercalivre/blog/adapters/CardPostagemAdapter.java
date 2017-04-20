@@ -88,6 +88,8 @@ public class CardPostagemAdapter extends RecyclerView.Adapter<CardPostagemAdapte
                 i.putExtra("date", mDataset.get(mPosition).date);
                 i.putExtra("content", mDataset.get(mPosition).content);
                 i.putExtra("thumbnail", mDataset.get(mPosition).thumbnail);
+                i.putExtra("url", mDataset.get(mPosition).url);
+                i.putExtra("nickname", "alan dos santos");
 
 
                 mContext.startActivity(i);
