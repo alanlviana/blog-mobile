@@ -53,7 +53,8 @@ public class LeitorActivity extends AppCompatActivity {
 
 
         CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle(getString(R.string.toolbar_title));
+        collapsingToolbar.setTitle(str_nickname);
+        toolbar.setSubtitle(str_date);
         wv_content = (WebView) findViewById(R.id.wv_artigo);
         header = (ImageView) findViewById(R.id.header);
 
