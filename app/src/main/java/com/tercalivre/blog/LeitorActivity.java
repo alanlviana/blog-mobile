@@ -48,24 +48,19 @@ public class LeitorActivity extends AppCompatActivity {
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
 
         CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle(str_nickname);
-        toolbar.setSubtitle(str_date);
         wv_content = (WebView) findViewById(R.id.wv_artigo);
         header = (ImageView) findViewById(R.id.header);
 
+
+
+
         Picasso.with(this).load(str_thumbnail).placeholder(R.drawable.backgroud_drawer).into(header);
 
-        wv_content.setScrollContainer(false);
-        wv_content.getSettings().setSupportZoom(false);
-        wv_content.getSettings().setJavaScriptEnabled(true);
-        wv_content.getSettings().setPluginState(WebSettings.PluginState.ON);
-        wv_content.setWebChromeClient(new WebChromeClient());
-        wv_content.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+
         wv_content.loadData(getHTML(), "text/html; charset=utf-8", "utf-8");
     }
 
