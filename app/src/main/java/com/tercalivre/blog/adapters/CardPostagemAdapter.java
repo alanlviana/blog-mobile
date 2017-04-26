@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.tercalivre.blog.LeitorActivity;
 import com.tercalivre.blog.R;
-import com.tercalivre.blog.model.ObjetoAPI;
+import com.tercalivre.blog.model.Post;
 import com.tercalivre.blog.utils.RetornaHoraAmigavel;
 
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class CardPostagemAdapter extends RecyclerView.Adapter<CardPostagemAdapter.ViewHolder> {
 
-    private List<ObjetoAPI.WordpressJson.Post> mDataset;
+    private List<Post> mDataset;
     private Context mContext;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -43,7 +43,7 @@ public class CardPostagemAdapter extends RecyclerView.Adapter<CardPostagemAdapte
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public CardPostagemAdapter(Context context, List<ObjetoAPI.WordpressJson.Post>
+    public CardPostagemAdapter(Context context, List<Post>
             myDataset) {
         this.mDataset = myDataset;
         this.mContext = context;

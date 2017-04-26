@@ -27,19 +27,19 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.tercalivre.blog.adapters.CardPostagemAdapter;
 import com.tercalivre.blog.adapters.EndlessRecyclerOnScrollListener;
-import com.tercalivre.blog.model.ObjetoAPI;
+import com.tercalivre.blog.model.Post;
 import com.tercalivre.blog.utils.NetworkCache;
 import com.tercalivre.blog.utils.Settings;
+import com.tercalivre.blog.wordpress.WordpressAPI;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ListaPostagensActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private RecyclerView mRecyclerView;
-    private List<ObjetoAPI.WordpressJson.Post> wordpressJson;
+    private List<Post> wordpressJson;
     private EndlessRecyclerOnScrollListener scrollListener;
     private RecyclerView.Adapter mAdapter;
     private LinearLayoutManager mLayoutManager;
@@ -160,7 +160,7 @@ public class ListaPostagensActivity extends AppCompatActivity
                 public void onResponse(String response) {
                     GsonBuilder builder = new GsonBuilder();
                     Gson mGson = builder.create();
-                    ObjetoAPI.WordpressJson wordpressResponse = mGson.fromJson(response, ObjetoAPI.WordpressJson.class);
+                    WordpressAPI.PostResponse wordpressResponse = mGson.fromJson(response, WordpressAPI.PostResponse.class);
                     swipeRefresh.setRefreshing(false);
 
 
