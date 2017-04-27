@@ -84,14 +84,7 @@ public class CardPostagemAdapter extends RecyclerView.Adapter<CardPostagemAdapte
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(mContext, LeitorActivity.class);
-                i.putExtra("title", mDataset.get(mPosition).title);
-                i.putExtra("date", mDataset.get(mPosition).date);
-                i.putExtra("content", mDataset.get(mPosition).content);
-                i.putExtra("thumbnail", mDataset.get(mPosition).thumbnail);
-                i.putExtra("url", mDataset.get(mPosition).url);
-                i.putExtra("nickname", "alan dos santos");
-
-
+                i.putExtra(LeitorActivity.ARG_POST, mDataset.get(mPosition));
                 mContext.startActivity(i);
             }
         });

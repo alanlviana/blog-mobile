@@ -4,13 +4,14 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by alanl on 25/04/2017.
  */
 
-public class Post implements Comparable {
+public class Post implements Comparable, Serializable {
     @SerializedName("categories")
     public List<Category> categories;
 

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,20 +20,19 @@ import android.widget.ImageView;
 
 
 import com.squareup.picasso.Picasso;
+import com.tercalivre.blog.fragments.LeitorFragment;
+import com.tercalivre.blog.model.Post;
 
 import java.io.InputStream;
 
-public class LeitorActivity extends AppCompatActivity {
+public class LeitorActivity extends AppCompatActivity
+implements LeitorFragment.OnFragmentInteractionListener
+{
+    public static final String ARG_POST = "ARG_POST";
+    private Post mPost;
+    private FragmentManager fragmentManager;
 
-    private String str_content;
-    private String str_title;
-    private String str_date;
-    private String str_thumbnail;
-    private String str_url;
-    private String str_nickname;
 
-    private ImageView header;
-    private WebView wv_content;
     private ShareActionProvider mShareActionProvider;
 
     @Override
@@ -39,29 +40,13 @@ public class LeitorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leitor);
 
-        str_title = this.getIntent().getStringExtra("title");
-        str_date = this.getIntent().getStringExtra("date");
-        str_content = this.getIntent().getStringExtra("content");
-        str_thumbnail = this.getIntent().getStringExtra("thumbnail");
-        str_url = this.getIntent().getStringExtra("url");
-        str_nickname = this.getIntent().getStringExtra("nickname");
+        mPost = (Post) getIntent().getSerializableExtra(ARG_POST);
 
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-
-
-        CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        wv_content = (WebView) findViewById(R.id.wv_artigo);
-        header = (ImageView) findViewById(R.id.header);
-
-
-
-
-        Picasso.with(this).load(str_thumbnail).placeholder(R.drawable.backgroud_drawer).into(header);
-
-
-        wv_content.loadData(getHTML(), "text/html; charset=utf-8", "utf-8");
+        fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        LeitorFragment leitorFragment = LeitorFragment.newInstance(mPost);
+        fragmentTransaction.add(R.id.leitorFragment, leitorFragment);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -77,8 +62,8 @@ public class LeitorActivity extends AppCompatActivity {
 
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, str_url);
-        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, str_title);
+        intent.putExtra(Intent.EXTRA_TEXT, mPost.url);
+        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, mPost.title);
 
         setShareIntent(intent);
 
@@ -105,32 +90,8 @@ public class LeitorActivity extends AppCompatActivity {
     }
 
 
-    private String getHTML(){
-        String html = getHtmlTemplate();
+    @Override
+    public void onFragmentInteraction(Uri uri) {
 
-        html = html.replaceAll("@@TITLE@@",str_title);
-        html = html.replaceAll("@@CONTENT@@",str_content);
-        html = html.replaceAll("@@AUTHOR@@",str_nickname);
-        html = html.replaceAll("@@DATE@@",str_date);
-
-        return html;
     }
-
-    private String getHtmlTemplate(){
-        String html = "";
-
-        try {
-            Resources res = getResources();
-            InputStream in_s = res.openRawResource(R.raw.html_template);
-
-            byte[] b = new byte[in_s.available()];
-            in_s.read(b);
-            html = new String(b);
-        } catch (Exception e) {
-            html = null;
-        }
-
-        return html;
-    }
-
 }
