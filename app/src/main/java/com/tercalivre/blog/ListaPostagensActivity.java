@@ -2,6 +2,7 @@ package com.tercalivre.blog;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +12,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,7 +27,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.tercalivre.blog.adapters.CardPostagemAdapter;
-import com.tercalivre.blog.adapters.EndlessRecyclerOnScrollListener;
+import com.tercalivre.blog.adapters.OnLoadMoreListener;
 import com.tercalivre.blog.model.Post;
 import com.tercalivre.blog.utils.NetworkCache;
 import com.tercalivre.blog.utils.Settings;
@@ -40,13 +40,14 @@ public class ListaPostagensActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private RecyclerView mRecyclerView;
-    private List<Post> wordpressJson;
-    private EndlessRecyclerOnScrollListener scrollListener;
-    private RecyclerView.Adapter mAdapter;
+    private List<Post> postagens;
+    private CardPostagemAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private ProgressDialog pDialog;
     private SwipeRefreshLayout swipeRefresh;
-    private final int quantidadePorPagina = 10;
+    protected Handler handler;
+
+    private int mPagina = 1;
 
 
     @Override
@@ -62,23 +63,25 @@ public class ListaPostagensActivity extends AppCompatActivity
         pDialog = new ProgressDialog(ListaPostagensActivity.this);
         pDialog.setCancelable(false);
         pDialog.setMessage("Carregando Posts");
-
+        handler = new Handler();
         mRecyclerView = (RecyclerView) findViewById(R.id.postagemReciclerView);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        wordpressJson = new ArrayList<>();
-        mAdapter = new CardPostagemAdapter(ListaPostagensActivity.this,wordpressJson);
+        postagens = new ArrayList<>();
+        mAdapter = new CardPostagemAdapter(ListaPostagensActivity.this,postagens,mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
 
-        scrollListener =new EndlessRecyclerOnScrollListener(mLayoutManager) {
-            @Override
-            public void onLoadMore(int current_page) {
-                getPostJSON(current_page);
-            }
-        };
 
-        mRecyclerView.setOnScrollListener(scrollListener);
+        mAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                //add null , so the adapter will check view_type and show progress bar at bottom
+                postagens.add(null);
+                mAdapter.notifyItemInserted(postagens.size() - 1);
+                getPostJSON(mPagina,2000);
+            }
+        });
 
         swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.postagens_swipe_refresh);
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -150,38 +153,53 @@ public class ListaPostagensActivity extends AppCompatActivity
     }
 
 
-    private void getPostJSON(int pagina){
+    private void getPostJSON(final int pagina, final int delay){
         showDialog();
         final String url = Settings.URL_MAIN+"&page="+pagina;
-
+        Log.i("POST_URL",url);
         try {
+            if (mAdapter.isLoading()){
+                return;
+            }
+
+            mAdapter.setLoading();
+
             RequestQueue queue = Volley.newRequestQueue(ListaPostagensActivity.this);
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {;
                 @Override
                 public void onResponse(String response) {
                     GsonBuilder builder = new GsonBuilder();
                     Gson mGson = builder.create();
-                    WordpressAPI.PostResponse wordpressResponse = mGson.fromJson(response, WordpressAPI.PostResponse.class);
+                    final WordpressAPI.PostResponse wordpressResponse = mGson.fromJson(response, WordpressAPI.PostResponse.class);
                     swipeRefresh.setRefreshing(false);
 
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            //   remove progress item
+                            int ultimoItem = postagens.size() - 1;
+                            if (ultimoItem >= 0 && postagens.get(ultimoItem) == null){
+                                postagens.remove(ultimoItem);
+                                mAdapter.notifyItemRemoved(postagens.size());
+                            }
+                            for (int i = 0; i <= wordpressResponse.posts.size()-1; i++) {
+                                Post post = wordpressResponse.posts.get(i);
+                                if (!postagens.contains(post)){
+                                    postagens.add(post);
 
-                    if (wordpressResponse.posts.size() > 0){
-                        Log.d("URL:",url);
-                        Log.d("RESPONSE:",String.valueOf(wordpressResponse.posts.size()));
+                                    mAdapter.notifyItemInserted(postagens.size());
+                                }
+                            }
+                            Log.i("POST_QTD",String.valueOf(postagens.size()));
+                            mPagina = (int)Math.floor(postagens.size()/10)+1;
 
-                        wordpressJson.addAll(wordpressResponse.posts);
-                        //Collections.sort(wordpressJson);
-                        //Collections.reverse(wordpressJson);
-                        if (mAdapter.getItemCount()>0){
-                            mAdapter.notifyDataSetChanged();
-                        }
+                            if (wordpressResponse.pages == pagina){
+                                mAdapter.setCompleteLoaded();
+                            }
 
-
-
-                    }
-
-
-                    hideDialog();
+                            mAdapter.setLoaded();
+                            }
+                    }, 0);
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -205,22 +223,28 @@ public class ListaPostagensActivity extends AppCompatActivity
         }
     }
 
+
+
     private void showDialog() {
-        if (!pDialog.isShowing())
-            pDialog.show();
+       // if (!pDialog.isShowing())
+       //     pDialog.show();
     }
 
     private void hideDialog() {
-        if (pDialog.isShowing())
-            pDialog.dismiss();
+        //if (pDialog.isShowing())
+        //    pDialog.dismiss();
     }
 
 
     public void refresh(){
-        wordpressJson.clear();
-        getPostJSON(1);
-        scrollListener.resetState();
+        postagens.clear();
+        postagens.add(null);
+        mAdapter.setIncompleteLoaded();
+        mAdapter.notifyDataSetChanged();
 
+
+        mPagina = 1;
+        getPostJSON(mPagina,1000);
     }
 
 }

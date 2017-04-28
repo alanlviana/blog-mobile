@@ -45,6 +45,19 @@ public class Post implements Comparable, Serializable {
 
         return 0;
     }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        boolean sameSame = false;
+
+        if (object != null && object instanceof Post)
+        {
+            sameSame = this.id == ((Post) object).id;
+        }
+
+        return sameSame;
+    }
 }
 
 
