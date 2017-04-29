@@ -115,8 +115,8 @@ public class CardPostagemAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
 
             postViewHolder.mCaption.setText(Html.fromHtml(mDataset.get(position).title));
-            if (mDataset.get(position) != null && mDataset.get(position).categories.size() > 0) {
-                postViewHolder.mCategory.setText(Html.fromHtml(mDataset.get(position).categories.get(0).title));
+            if (mDataset.get(position) != null && mDataset.get(position).categories.size() >= 0) {
+                postViewHolder.mCategory.setText("#Deu na Telha");
             }
 
 
