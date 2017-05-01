@@ -79,11 +79,6 @@ public class TabLayoutFragment extends Fragment{
 
         mActivity = (ListaPostagensActivity)getActivity();
 
-        Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.tab_toolbar);
-        mActivity.setSupportActionBar(toolbar);
-        mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mActivity.getSupportActionBar().setHomeButtonEnabled(true);
-
         mTabLayout = (TabLayout) rootView.findViewById(R.id.tab_layout);
         mViewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
         // Preload 1 page to either side of the current page
