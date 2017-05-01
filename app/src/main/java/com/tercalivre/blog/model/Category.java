@@ -9,6 +9,9 @@ import java.io.Serializable;
  */
 
 public class Category implements Serializable {
+    @SerializedName("id")
+    public int id;
+
     @SerializedName("slug")
     public String slug;
 
@@ -17,4 +20,13 @@ public class Category implements Serializable {
 
     @SerializedName("post_count")
     public String post_count;
+
+    public Category(int id, String slug, String title, String post_count) {
+        this.id = id;
+        this.slug = slug;
+        this.title = title;
+        this.post_count = post_count;
+    }
+
+    public Category(){}
 }
