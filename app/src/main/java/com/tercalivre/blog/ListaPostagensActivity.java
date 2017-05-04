@@ -43,6 +43,8 @@ import java.util.List;
 public class ListaPostagensActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+
+    public static final String TAG = "LISTA_POSTAGENS_ACTIVITY";
     private FragmentManager fragmentManager;
 
 
@@ -54,7 +56,7 @@ public class ListaPostagensActivity extends AppCompatActivity
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         TabLayoutFragment tabLayoutFragment = TabLayoutFragment.newInstance();
-        fragmentTransaction.add(R.id.container_lista, tabLayoutFragment);
+        fragmentTransaction.replace(R.id.container_lista, tabLayoutFragment);
         fragmentTransaction.commit();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);

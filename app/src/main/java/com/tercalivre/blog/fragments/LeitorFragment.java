@@ -108,7 +108,7 @@ public class LeitorFragment extends Fragment {
 
             appbar = (AppBarLayout)view.findViewById(R.id.appbar);
             collapsing_toolbar = (CollapsingToolbarLayout)view.findViewById(R.id.collapsing_toolbar);
-            img_header = (ImageView)view.findViewById(R.id.img_header);
+            img_header = (ImageView)view.findViewById(R.id.header);
             toolbar = (Toolbar)view.findViewById(R.id.toolbar);
             wv_artigo = (WebView)view.findViewById(R.id.wv_artigo);
 
@@ -150,6 +150,11 @@ public class LeitorFragment extends Fragment {
         html = html.replaceAll("@@CONTENT@@",post.content);
         html = html.replaceAll("@@AUTHOR@@",post.excerpt);
         html = html.replaceAll("@@DATE@@",post.date);
+
+        html = html.replaceAll("<iframe","<div class=\"videoWrapper\">\n" +
+                "  <iframe");
+
+        html = html.replaceAll("</iframe>","</iframe></div>");
 
         return html;
     }

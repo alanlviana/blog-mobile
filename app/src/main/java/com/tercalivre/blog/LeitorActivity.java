@@ -45,7 +45,7 @@ implements LeitorFragment.OnFragmentInteractionListener
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         LeitorFragment leitorFragment = LeitorFragment.newInstance(mPost);
-        fragmentTransaction.add(R.id.leitorFragment, leitorFragment);
+        fragmentTransaction.replace(R.id.leitorFragment, leitorFragment);
         fragmentTransaction.commit();
     }
 

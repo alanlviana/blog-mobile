@@ -3,6 +3,7 @@ package com.tercalivre.blog.fragments;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -49,9 +50,10 @@ public class TabLayoutFragment extends Fragment{
     private ViewPager mViewPager;
     private SearchView searchView;
     private MenuItem searchMenuItem;
+    private RecyclerViewFragmentPagerAdaptor adaptor;
 
     // List of all categories
-    protected static ArrayList<Category> categories = null;
+    private ArrayList<Category> categories = null;
     private TabLayoutListener mListener;
 
     public static TabLayoutFragment newInstance() {
@@ -66,6 +68,9 @@ public class TabLayoutFragment extends Fragment{
         // Stops onDestroy() and onCreate() being called when the parent
         // activity is destroyed/recreated on configuration change
         setRetainInstance(true);
+
+        Log.d(TAG,"Criado adaptor");
+
 
         // Display a search menu
         setHasOptionsMenu(true);
@@ -83,28 +88,33 @@ public class TabLayoutFragment extends Fragment{
         mViewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
         // Preload 1 page to either side of the current page
         mViewPager.setOffscreenPageLimit(1);
+        categories = new ArrayList<>();
+        adaptor = new RecyclerViewFragmentPagerAdaptor(getChildFragmentManager(), categories);
+        mViewPager.setAdapter(adaptor);
+        mTabLayout.setupWithViewPager(mViewPager);
+
+        loadCategories();
 
         return rootView;
     }
+
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        loadCategories();
+
     }
 
     private void loadCategories() {
 
-        categories = new ArrayList<>();
+
 
         categories.add(new Category(3,"deunatelha","#DeuNaTelha","1"));
         categories.add(new Category(5,"de-veritate","De Veritate","1"));
+        adaptor.notifyDataSetChanged();
 
-        RecyclerViewFragmentPagerAdaptor adaptor = new
-                RecyclerViewFragmentPagerAdaptor(getChildFragmentManager(), categories);
-        mViewPager.setAdapter(adaptor);
-        mTabLayout.setupWithViewPager(mViewPager);
     }
 
     public interface TabLayoutListener {
