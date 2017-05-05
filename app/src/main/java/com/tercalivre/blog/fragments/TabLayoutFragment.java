@@ -109,11 +109,27 @@ public class TabLayoutFragment extends Fragment{
 
     private void loadCategories() {
 
+        RequestQueue queue = Volley.newRequestQueue(mActivity);
+        StringRequest request = new StringRequest(Settings.URL_CATEGORY, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                GsonBuilder builder = new GsonBuilder();
+                Gson mGson = builder.create();
+                final WordpressAPI.CategoryResponse categoryResponse = mGson.fromJson(response,WordpressAPI.CategoryResponse.class);
+                categories.add(new Category(-1,"Todos","Todos","1"));
+                categories.addAll(categoryResponse.categories);
+                adaptor.notifyDataSetChanged();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                categories.add(new Category(-1,"Todos","Todos","1"));
+                adaptor.notifyDataSetChanged();
+            }
+        });
+        queue.add(request);
 
 
-        categories.add(new Category(3,"deunatelha","#DeuNaTelha","1"));
-        categories.add(new Category(5,"de-veritate","De Veritate","1"));
-        adaptor.notifyDataSetChanged();
 
     }
 

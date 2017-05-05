@@ -147,7 +147,16 @@ public class RecyclerViewFragment extends Fragment {
     }
 
     private void getPostJSON(final int pagina, final int delay){
-        final String url = Settings.URL_MAIN+"&page="+pagina;
+
+
+        String url;
+        if (mCatId == -1){
+            url = Settings.URL_MAIN+"&page="+pagina;
+        }else{
+            url = Settings.URL_GET_CATEGORY_POST+mCatId+"&page="+pagina;
+        }
+
+
         Log.i("POST_URL",url);
         try {
             if (mAdapter.isLoading()){
