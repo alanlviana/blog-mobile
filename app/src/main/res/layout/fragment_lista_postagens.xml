@@ -14,12 +14,19 @@
     tools:context="com.tercalivre.blog.ListaPostagensActivity"
     tools:showIn="@layout/app_bar_lista_postagens">
 
+    <TextView
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/no_records"
+        android:visibility="gone"
+        />
 
-    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/postagens_swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/postagemReciclerView"
             android:layout_width="match_parent"
@@ -29,11 +36,5 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <TextView
-        android:id="@+id/empty_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="No Records"
-        android:visibility="gone" />
+
 </LinearLayout>

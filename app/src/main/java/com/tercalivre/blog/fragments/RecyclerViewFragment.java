@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
@@ -44,7 +45,7 @@ import java.util.List;
 
 public class RecyclerViewFragment extends Fragment {
 
-    private static final String TAG = "RecyclerViewFragment";
+    private static final String TAG = "recycler_view_fragment";
     protected static final String CAT_ID = "id";
     protected static final String QUERY = "query";
 
@@ -58,6 +59,7 @@ public class RecyclerViewFragment extends Fragment {
     private LinearLayoutManager mLayoutManager;
     private ProgressDialog pDialog;
     private SwipeRefreshLayout swipeRefresh;
+    private TextView emptyView;
     protected Handler handler;
 
     private int mPagina = 1;
@@ -108,7 +110,9 @@ public class RecyclerViewFragment extends Fragment {
         pDialog.setCancelable(false);
         pDialog.setMessage("Carregando Posts");
         handler = new Handler();
+        emptyView = (TextView) rootView.findViewById(R.id.empty_view);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.postagemReciclerView);
+
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -150,13 +154,18 @@ public class RecyclerViewFragment extends Fragment {
 
 
         String url;
-        if (mCatId == -1){
-            url = Settings.URL_MAIN+"&page="+pagina;
+        if (mQuery.equals("")){
+            if (mCatId == -1){
+                url = Settings.URL_MAIN+"&page="+pagina;
+            }else{
+                url = Settings.URL_GET_CATEGORY_POST+mCatId+"&page="+pagina;
+            }
         }else{
-            url = Settings.URL_GET_CATEGORY_POST+mCatId+"&page="+pagina;
+            url = Settings.URL_SEARCH_RESULTS+mQuery+"&page="+pagina;
         }
 
 
+        final String urlFinal = url;
         Log.i("POST_URL",url);
         try {
             if (mAdapter.isLoading()){
@@ -174,10 +183,19 @@ public class RecyclerViewFragment extends Fragment {
                     final WordpressAPI.PostResponse wordpressResponse = mGson.fromJson(response, WordpressAPI.PostResponse.class);
                     swipeRefresh.setRefreshing(false);
 
+                    Log.i("POST_QTD","count_total>"+String.valueOf(wordpressResponse.count_total)+">>"+urlFinal);
+                    if (wordpressResponse.count_total == 0 && postagens.size() == 1){
+                        mAdapter.setCompleteLoaded();
+                        mRecyclerView.setVisibility(View.GONE);
+                        emptyView.setVisibility(View.VISIBLE);
+                        return;
+                    }
+
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             //   remove progress item
+                            Log.d(TAG,"Inicio Runnable - RecyclerView");
                             int ultimoItem = postagens.size() - 1;
                             if (ultimoItem >= 0 && postagens.get(ultimoItem) == null){
                                 postagens.remove(ultimoItem);
@@ -191,14 +209,17 @@ public class RecyclerViewFragment extends Fragment {
                                     mAdapter.notifyItemInserted(postagens.size());
                                 }
                             }
-                            Log.i("POST_QTD",String.valueOf(postagens.size()));
+                            Log.i("POST_QTD","count_total>"+String.valueOf(postagens.size()));
                             mPagina = (int)Math.floor(postagens.size()/10)+1;
+
 
                             if (wordpressResponse.pages == pagina){
                                 mAdapter.setCompleteLoaded();
                             }
 
+
                             mAdapter.setLoaded();
+                            Log.d(TAG,"Fim Runnable - RecyclerView");
                         }
                     }, 0);
                 }
@@ -206,9 +227,8 @@ public class RecyclerViewFragment extends Fragment {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     swipeRefresh.setRefreshing(false);
-                    Toast.makeText(mContext,
-                            "Check your Internet Connection,\nSwipe or click Refresh button.",
-                            Toast.LENGTH_SHORT).show();
+                    error.fillInStackTrace();
+                    Log.e(TAG,error.getMessage());
                 }
             }) {
                 @Override

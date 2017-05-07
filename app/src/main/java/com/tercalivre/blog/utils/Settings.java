@@ -10,5 +10,6 @@ public class Settings {
     public static final String URL_CATEGORY = "http://alanlviana.com.br/blog/api/get_category_index/";
     public static final String URL_GET_POST = "http://alanlviana.com.br/blog/api/get_post/?id=";
     public static final String URL_GET_CATEGORY_POST = "http://alanlviana.com.br/blog/api/get_category_posts/?id=";
+    public static final String URL_SEARCH_RESULTS = "http://alanlviana.com.br/blog/api/get_search_results/?search=";
 
 }
