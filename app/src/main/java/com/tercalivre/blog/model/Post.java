@@ -1,6 +1,7 @@
 package com.tercalivre.blog.model;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -53,7 +54,8 @@ public class Post implements Comparable, Serializable {
 
         if (object != null && object instanceof Post)
         {
-            sameSame = this.id == ((Post) object).id;
+            Post target = ((Post) object);
+            sameSame = this.id.equals(target.id);
         }
 
         return sameSame;

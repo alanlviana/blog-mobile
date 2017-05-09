@@ -120,13 +120,13 @@ public class RecyclerViewFragment extends Fragment {
         mAdapter = new CardPostagemAdapter(mContext,postagens,mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
 
+        mRecyclerView.setVisibility(View.VISIBLE);
+        emptyView.setVisibility(View.GONE);
+
 
         mAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                //add null , so the adapter will check view_type and show progress bar at bottom
-                postagens.add(null);
-                mAdapter.notifyItemInserted(postagens.size() - 1);
                 getPostJSON(mPagina,2000);
             }
         });
@@ -183,24 +183,14 @@ public class RecyclerViewFragment extends Fragment {
                     final WordpressAPI.PostResponse wordpressResponse = mGson.fromJson(response, WordpressAPI.PostResponse.class);
                     swipeRefresh.setRefreshing(false);
 
-                    Log.i("POST_QTD","count_total>"+String.valueOf(wordpressResponse.count_total)+">>"+urlFinal);
-                    if (wordpressResponse.count_total == 0 && postagens.size() == 1){
-                        mAdapter.setCompleteLoaded();
-                        mRecyclerView.setVisibility(View.GONE);
-                        emptyView.setVisibility(View.VISIBLE);
-                        return;
-                    }
+
 
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             //   remove progress item
                             Log.d(TAG,"Inicio Runnable - RecyclerView");
-                            int ultimoItem = postagens.size() - 1;
-                            if (ultimoItem >= 0 && postagens.get(ultimoItem) == null){
-                                postagens.remove(ultimoItem);
-                                mAdapter.notifyItemRemoved(postagens.size());
-                            }
+
                             for (int i = 0; i <= wordpressResponse.posts.size()-1; i++) {
                                 Post post = wordpressResponse.posts.get(i);
                                 if (!postagens.contains(post)){
@@ -209,14 +199,22 @@ public class RecyclerViewFragment extends Fragment {
                                     mAdapter.notifyItemInserted(postagens.size());
                                 }
                             }
-                            Log.i("POST_QTD","count_total>"+String.valueOf(postagens.size()));
-                            mPagina = (int)Math.floor(postagens.size()/10)+1;
+                            Log.i("POST_QTD_TOTAL",String.valueOf(postagens.size()));
+                            mPagina = pagina+1;
 
-
+                            Log.i("POST_PAGES",mPagina+"/"+wordpressResponse.pages);
                             if (wordpressResponse.pages == pagina){
                                 mAdapter.setCompleteLoaded();
                             }
 
+                            if (postagens.size() == 0){
+                                mAdapter.setCompleteLoaded();
+                                mRecyclerView.setVisibility(View.GONE);
+                                emptyView.setVisibility(View.VISIBLE);
+                            }else{
+                                mRecyclerView.setVisibility(View.VISIBLE);
+                                emptyView.setVisibility(View.GONE);
+                            }
 
                             mAdapter.setLoaded();
                             Log.d(TAG,"Fim Runnable - RecyclerView");
@@ -228,7 +226,7 @@ public class RecyclerViewFragment extends Fragment {
                 public void onErrorResponse(VolleyError error) {
                     swipeRefresh.setRefreshing(false);
                     error.fillInStackTrace();
-                    Log.e(TAG,error.getMessage());
+                    //Log.e(TAG,error.getMessage());
                 }
             }) {
                 @Override
@@ -244,7 +242,6 @@ public class RecyclerViewFragment extends Fragment {
     }
     public void refresh(){
         postagens.clear();
-        postagens.add(null);
         mAdapter.setIncompleteLoaded();
         mAdapter.notifyDataSetChanged();
 

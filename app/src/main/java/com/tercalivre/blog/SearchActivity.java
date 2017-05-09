@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -32,12 +33,19 @@ public class SearchActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SearchActivity.super.onBackPressed();
+            }
+        });
+
         Bundle extras = getIntent().getExtras();
         if (extras != null){
             mQuery = extras.getString(QUERY);
         }
         String title = getResources().getString(R.string.title_activity_search)+" \""+mQuery+"\"";
-        getSupportActionBar().setTitle(title);
+        //getSupportActionBar().setTitle(title);
 
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -46,17 +54,5 @@ public class SearchActivity extends AppCompatActivity {
         fragmentTransaction.commit();
 
 
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        Log.d(TAG,"onOptionsItemSelected");
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-        }
-        return true;
     }
 }
