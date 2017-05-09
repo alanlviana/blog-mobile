@@ -2,7 +2,6 @@ package com.tercalivre.blog.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.tercalivre.blog.fragments.RecyclerViewFragment;

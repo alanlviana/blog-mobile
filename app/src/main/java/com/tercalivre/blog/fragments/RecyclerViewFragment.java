@@ -1,7 +1,6 @@
 package com.tercalivre.blog.fragments;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -16,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -27,7 +25,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.tercalivre.blog.ListaPostagensActivity;
 import com.tercalivre.blog.R;
 import com.tercalivre.blog.adapters.CardPostagemAdapter;
 import com.tercalivre.blog.adapters.OnLoadMoreListener;

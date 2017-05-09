@@ -6,10 +6,6 @@ import com.tercalivre.blog.model.Post;
 
 import java.util.List;
 
-/**
- * Created by alanl on 25/04/2017.
- */
-
 public class WordpressAPI {
 
     public class PostResponse{
