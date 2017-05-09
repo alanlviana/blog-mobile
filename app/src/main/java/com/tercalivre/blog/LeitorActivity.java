@@ -1,33 +1,19 @@
 package com.tercalivre.blog;
 
 import android.content.Intent;
-import android.content.res.Resources;
-import android.net.Uri;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.ShareActionProvider;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.widget.ImageView;
 
-
-import com.squareup.picasso.Picasso;
 import com.tercalivre.blog.fragments.LeitorFragment;
 import com.tercalivre.blog.model.Post;
 
-import java.io.InputStream;
-
-public class LeitorActivity extends AppCompatActivity
-implements LeitorFragment.OnFragmentInteractionListener
-{
+public class LeitorActivity extends AppCompatActivity{
     public static final String ARG_POST = "ARG_POST";
     private Post mPost;
     private FragmentManager fragmentManager;
@@ -90,8 +76,5 @@ implements LeitorFragment.OnFragmentInteractionListener
     }
 
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
 
-    }
 }

@@ -2,13 +2,11 @@ package com.tercalivre.blog.fragments;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,30 +16,19 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
-
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-import com.tercalivre.blog.LeitorActivity;
 import com.tercalivre.blog.R;
 import com.tercalivre.blog.model.Post;
 
 import java.io.InputStream;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link LeitorFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link LeitorFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class LeitorFragment extends Fragment {
     private static final String ARG_POST = "com.tercalivre.blog.fragments.LeitorFragment.post";
 
     private Post mPost;
     private LeitorFragmentHolder mHolder;
 
-    private OnFragmentInteractionListener mListener;
+    private Context mListener;
 
     public LeitorFragment() {
         // Required empty public constructor
@@ -72,21 +59,10 @@ public class LeitorFragment extends Fragment {
         return view;
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+        mListener = context;
     }
 
     @Override
@@ -175,12 +151,5 @@ public class LeitorFragment extends Fragment {
         }
 
         return html;
-    }
-
-
-
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 }
