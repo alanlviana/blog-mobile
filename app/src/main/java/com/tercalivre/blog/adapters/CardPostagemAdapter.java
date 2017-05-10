@@ -115,9 +115,7 @@ public class CardPostagemAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
 
             postViewHolder.mCaption.setText(Html.fromHtml(mDataset.get(position).title));
-            if (mDataset.get(position) != null && mDataset.get(position).categories.size() >= 0) {
-                postViewHolder.mCategory.setText("#Deu na Telha");
-            }
+            postViewHolder.mCategory.setText(mDataset.get(position).getMainCategory());
 
 
             String descricaoHora = new RetornaHoraAmigavel().retornaDescricaoDiferenca(mDataset.get(position).date);

@@ -37,6 +37,14 @@ public class Post implements Comparable, Serializable {
     @SerializedName("date")
     public String date;
 
+    public String getMainCategory(){
+        if (categories == null || categories.size() == 0) {
+            return "";
+        }
+
+        return categories.get(0).title;
+    }
+
     @Override
     public int compareTo(@NonNull Object o) {
         if (o instanceof Post) {

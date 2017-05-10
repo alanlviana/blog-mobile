@@ -109,7 +109,7 @@ public class LeitorFragment extends Fragment {
         }
 
         public void setPostUI(Post post){
-            collapsing_toolbar.setTitle(post.title);
+            collapsing_toolbar.setTitle(post.getMainCategory());
             Picasso picasso = Picasso.with(getContext());
             picasso.setIndicatorsEnabled(true);
             picasso.setLoggingEnabled(true);

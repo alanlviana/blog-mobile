@@ -6,4 +6,9 @@
     <color name="stdDarkBlueText">#FFFFFF</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="background">#ffffff</color>
+
+    <color name="translucent_scrim_top">#46000000</color>
+    <color name="translucent_scrim_top_center">#0C000000</color>
+    <color name="translucent_scrim_bottom">#78000000</color>
+    <color name="translucent_scrim_bottom_center">#0D000000</color>
 </resources>
