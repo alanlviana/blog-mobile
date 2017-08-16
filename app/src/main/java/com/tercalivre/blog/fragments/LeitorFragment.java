@@ -2,6 +2,8 @@ package com.tercalivre.blog.fragments;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -12,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -105,6 +108,7 @@ public class LeitorFragment extends Fragment {
             wv_artigo.getSettings().setJavaScriptEnabled(true);
             wv_artigo.getSettings().setPluginState(WebSettings.PluginState.ON);
             wv_artigo.setWebChromeClient(new WebChromeClient());
+            wv_artigo.setBackgroundColor(Color.WHITE);
             wv_artigo.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         }
 

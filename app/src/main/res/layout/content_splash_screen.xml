@@ -14,6 +14,17 @@
         android:layout_height="192dp"
         android:src="@drawable/ic_512"
         android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/imgSplashLogo"
+        android:contentDescription="Logo do Aplicativo" />
+
+    <TextView
+        android:id="@+id/txtSlogan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_slogan"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/imgSplashLogo"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
